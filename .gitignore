@@ -1,3 +1,8 @@
 .kilocode/workflows/
 .specify/templates/
 .specify/scripts/
+node_modules/
+.yarn/
+.env
+dist/
+coverage/
