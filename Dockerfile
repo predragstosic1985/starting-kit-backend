@@ -2,7 +2,10 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package.json yarn.lock ./
+RUN corepack enable
+
+COPY .yarn .yarn
+COPY package.json yarn.lock .yarnrc.yml ./
 
 RUN yarn install
 
