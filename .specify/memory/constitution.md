@@ -1,10 +1,10 @@
 <!--
 Sync Impact Report
-Version change: 1.0.0 → 1.1.0
-List of modified principles: Added VII. Testing
+Version change: 1.1.0 → 1.2.0
+List of modified principles: None
 Added sections: None
 Removed sections: None
-Templates requiring updates: .specify/templates/plan-template.md (updated Constitution Check)
+Templates requiring updates: None
 Follow-up TODOs: None
 -->
 # Starting Kit Backend Platform Constitution
@@ -34,7 +34,7 @@ The system must be thoroughly tested with unit tests, end-to-end tests, and smok
 
 ## Technical Stack
 
-The backend is built using NestJS framework, with PostgreSQL as the primary database. The system supports RESTful APIs and is containerized for deployment.
+The backend is built using NestJS framework with the latest TypeScript version, PostgreSQL as the primary database, and Keycloak for security. Package management uses Yarn 4+. The system supports RESTful APIs compatible with all devices and is containerized for deployment.
 
 ## Development Standards
 
@@ -44,4 +44,4 @@ Code must follow TypeScript best practices, include comprehensive testing, use v
 
 Amendments to this constitution require approval from the project lead. Versioning follows semantic versioning. All changes must be documented and reviewed for compliance.
 
-**Version**: 1.1.0 | **Ratified**: 2025-12-13 | **Last Amended**: 2025-12-13
+**Version**: 1.2.0 | **Ratified**: 2025-12-13 | **Last Amended**: 2025-12-13
