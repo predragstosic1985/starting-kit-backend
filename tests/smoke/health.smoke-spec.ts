@@ -25,4 +25,10 @@ describe('Health Smoke Test', () => {
             .get('/health')
             .expect(200);
     });
+
+    it('should pass smoke test for authentication protection', () => {
+        return request(app.getHttpServer())
+            .get('/users')
+            .expect(401); // Should be protected
+    });
 });

@@ -25,4 +25,25 @@ describe('AppController (e2e)', () => {
         expect(res.body).toHaveProperty('service', 'Starting Kit Backend');
       });
   });
+
+  describe('Authentication Protected Endpoints', () => {
+    it('/users (GET) - should require authentication', () => {
+      return request(app.getHttpServer())
+        .get('/users')
+        .expect(401);
+    });
+
+    it('/users/profile (GET) - should require authentication', () => {
+      return request(app.getHttpServer())
+        .get('/users/profile')
+        .expect(401);
+    });
+
+    it('/users (POST) - should require authentication', () => {
+      return request(app.getHttpServer())
+        .post('/users')
+        .send({ name: 'Test User', email: 'test@example.com' })
+        .expect(401);
+    });
+  });
 });

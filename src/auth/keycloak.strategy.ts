@@ -16,6 +16,18 @@ export class KeycloakStrategy extends PassportStrategy(KeycloakBearerStrategy) {
     }
 
     async validate(payload: any, done: (err: any, user: any) => void) {
-        done(null, payload);
+        try {
+            // Extract user info from JWT payload
+            const user = {
+                id: payload.sub,
+                username: payload.preferred_username,
+                email: payload.email,
+                name: payload.name,
+                roles: payload.realm_access?.roles || [],
+            };
+            done(null, user);
+        } catch (error) {
+            done(error, null);
+        }
     }
 }
