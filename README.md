@@ -49,6 +49,7 @@ yarn run start:prod
 #### With Docker
 ```bash
 docker-compose up
+docker-compose up -d db keycloak
 ```
 
 ### Testing
