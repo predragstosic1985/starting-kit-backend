@@ -29,7 +29,7 @@ A modern, elegant, and scalable backend starting kit built with NestJS, designed
    ```
 3. Copy environment file:
    ```bash
-   cp .env.example .env
+   cp .env.local .env
    ```
 4. Configure your environment variables in `.env`
 
@@ -67,7 +67,19 @@ yarn run test:smoke
 
 ## API Endpoints
 
+### Health
 - `GET /health` - Health check endpoint
+
+### Users (Protected)
+- `GET /users` - Get all users (admin only)
+- `GET /users/:id` - Get user by ID
+- `POST /users` - Create new user
+- `PATCH /users/:id` - Update user
+- `DELETE /users/:id` - Delete user
+- `GET /users/profile` - Get current user profile
+
+### API Documentation
+- `GET /api` - Swagger/OpenAPI documentation
 
 ## Configuration
 

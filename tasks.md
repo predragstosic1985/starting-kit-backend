@@ -29,7 +29,7 @@ description: "Task list for MVP version of Starting Kit Backend Platform"
 - [x] T002 Initialize NestJS project with latest TypeScript
 - [x] T003 [P] Configure Yarn 4+ and install dependencies
 - [x] T004 [P] Setup linting and formatting tools
-- [x] T004a Create .env.example for configuration
+- [x] T004a Create .env.local for configuration
 - [x] T004b Create docker-compose.yml for containerization
 
 ---
@@ -87,7 +87,7 @@ description: "Task list for MVP version of Starting Kit Backend Platform"
 
 ### Implementation for User Story 2
 
-- [x] T020 [P] [US2] Setup environment variables in .env.example
+- [x] T020 [P] [US2] Setup environment variables in .env.local
 - [x] T021 [P] [US2] Create configuration modules in src/config/
 - [x] T022 [US2] Implement dynamic module loading
 - [x] T023 [US2] Add configurable endpoints based on settings
@@ -119,6 +119,38 @@ description: "Task list for MVP version of Starting Kit Backend Platform"
 
 ---
 
+## Phase 6: User Story 4 - Secure Authentication (Priority: P1) 🔐
+
+**Goal**: Implement comprehensive authentication and authorization system using Keycloak
+
+**Independent Test**: Can be tested by authenticating users and verifying role-based access control
+
+### Tests for User Story 4
+
+- [ ] T037 [P] [US4] Unit test for JWT authentication guard
+- [ ] T038 [P] [US4] Unit test for roles guard
+- [ ] T039 [P] [US4] Unit test for custom decorators
+- [ ] T040 [P] [US4] E2e test for protected endpoints
+- [ ] T041 [P] [US4] E2e test for role-based access
+- [ ] T042 [P] [US4] Smoke test for authentication flow
+
+### Implementation for User Story 4
+
+- [ ] T043 [P] [US4] Enhance Keycloak strategy with proper user extraction in src/auth/keycloak.strategy.ts
+- [ ] T044 [P] [US4] Create JWT authentication guard in src/auth/jwt-auth.guard.ts
+- [ ] T045 [P] [US4] Create roles-based guard in src/auth/roles.guard.ts
+- [ ] T046 [P] [US4] Create roles decorator in src/auth/roles.decorator.ts
+- [ ] T047 [P] [US4] Create user decorator in src/auth/user.decorator.ts
+- [ ] T048 [US4] Update AuthModule to export guards in src/auth/auth.module.ts
+- [ ] T049 [US4] Apply authentication guards to user controller in src/modules/users/user.controller.ts
+- [ ] T050 [US4] Add role-based protection to user endpoints
+- [ ] T051 [US4] Update environment variables for Keycloak client secret
+- [ ] T052 [US4] Update .env.local with Keycloak configuration template
+
+**Checkpoint**: Authentication system should be fully functional and testable independently
+
+---
+
 ## Phase N: Polish & Cross-Cutting Concerns
 
 **Purpose**: Improvements that affect multiple user stories
@@ -138,9 +170,9 @@ description: "Task list for MVP version of Starting Kit Backend Platform"
 
 - **Setup (Phase 1)**: No dependencies - can start immediately
 - **Foundational (Phase 2)**: Depends on Setup completion - BLOCKS all user stories
-- **User Stories (Phase 3+)**: All depend on Foundational phase completion
+- **User Stories (Phase 3-6)**: All depend on Foundational phase completion
   - User stories can then proceed in parallel (if staffed)
-  - Or sequentially in priority order (P1 → P2 → P3)
+  - Or sequentially in priority order (P1 → P2 → P3 → P1/US4)
 - **Polish (Final Phase)**: Depends on all desired user stories being complete
 
 ### User Story Dependencies
@@ -148,6 +180,7 @@ description: "Task list for MVP version of Starting Kit Backend Platform"
 - **User Story 1 - Elegant Backend Setup (P1)**: Can start after Foundational - No dependencies on other stories
 - **User Story 2 - High Configurability (P2)**: Can start after Foundational - May integrate with US1 but should be independently testable
 - **User Story 3 - Device Compatibility (P3)**: Can start after Foundational - May integrate with US1/US2 but should be independently testable
+- **User Story 4 - Secure Authentication (P1)**: Can start after Foundational - Critical security feature, should be implemented early
 
 ### Within Each User Story
 
@@ -181,8 +214,9 @@ description: "Task list for MVP version of Starting Kit Backend Platform"
 
 1. Complete Setup + Foundational → Foundation ready
 2. Add User Story 1 → Test independently → Deploy/Demo (MVP!)
-3. Add User Story 2 → Test independently → Deploy/Demo
-4. Add User Story 3 → Test independently → Deploy/Demo
+3. Add User Story 4 → Test independently → Deploy/Demo (Secure MVP!)
+4. Add User Story 2 → Test independently → Deploy/Demo
+5. Add User Story 3 → Test independently → Deploy/Demo
 
 ---
 

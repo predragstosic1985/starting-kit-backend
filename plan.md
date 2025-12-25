@@ -6,7 +6,7 @@
 
 ## Summary
 
-Initialize the Starting Kit Backend Platform with NestJS, latest TypeScript, PostgreSQL database, Keycloak security, and Yarn 4+ package management. Establish elegant, sleek, fast, modern, scalable, configurable, and secure foundation that stands out for any new application, working seamlessly on all devices.
+Initialize the Starting Kit Backend Platform with NestJS, latest TypeScript, PostgreSQL database, Keycloak security, and Yarn 4+ package management. Establish elegant, sleek, fast, modern, scalable, configurable, and secure foundation that stands out for any new application, working seamlessly on all devices. Implement comprehensive authentication and authorization system for secure API access.
 
 ## Technical Context
 
@@ -68,7 +68,7 @@ config/
 ├── docker/            # Docker files
 ├── docker-compose.yml # Container orchestration
 ├── keycloak/          # Keycloak configuration
-└── .env.example       # Environment template
+└── .env.local         # Environment template
 
 scripts/
 ├── setup.sh           # Setup script

@@ -51,6 +51,23 @@ Ensure the backend APIs work seamlessly on all devices.
 
 ---
 
+### User Story 4 - Secure Authentication (Priority: P1) 🔐
+
+Implement comprehensive authentication and authorization system using Keycloak.
+
+**Why this priority**: Security is fundamental to any modern application - must be implemented early.
+
+**Independent Test**: Can be tested by authenticating users and verifying role-based access control.
+
+**Acceptance Scenarios**:
+
+1. **Given** a user, **When** they authenticate via Keycloak, **Then** they receive JWT tokens for API access.
+2. **Given** protected endpoints, **When** accessed with valid tokens, **Then** requests succeed based on user roles.
+3. **Given** invalid or expired tokens, **When** accessing protected resources, **Then** access is denied with appropriate error responses.
+4. **Given** role-based guards, **When** users access restricted endpoints, **Then** access is granted/denied based on their assigned roles.
+
+---
+
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
@@ -60,9 +77,11 @@ Ensure the backend APIs work seamlessly on all devices.
 - **FR-003**: System MUST support RESTful APIs compatible with all devices.
 - **FR-004**: System MUST be fast, with response times under 100ms.
 - **FR-005**: System MUST follow clean architecture for maintainability.
-- **FR-006**: System MUST include security features with Keycloak.
-- **FR-007**: System MUST be scalable to handle growth.
-- **FR-008**: System MUST be extensible for future features.
+- **FR-006**: System MUST include comprehensive authentication and authorization with Keycloak.
+- **FR-007**: System MUST support role-based access control (RBAC).
+- **FR-008**: System MUST provide secure JWT token handling.
+- **FR-009**: System MUST be scalable to handle growth.
+- **FR-010**: System MUST be extensible for future features.
 
 ### Key Entities *(include if feature involves data)*
 
