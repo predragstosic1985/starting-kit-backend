@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -47,35 +47,35 @@ export class UserController {
 
     @Get(':id')
     @ApiOperation({ summary: 'Get a user by ID' })
-    @ApiParam({ name: 'id', description: 'User ID', type: Number })
+    @ApiParam({ name: 'id', description: 'User ID', type: String })
     @ApiResponse({ status: 200, description: 'User found', type: User })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
     @ApiResponse({ status: 404, description: 'User not found' })
-    findOne(@Param('id', ParseIntPipe) id: number) {
+    findOne(@Param('id') id: string) {
         return this.userService.findOne(id);
     }
 
     @Patch(':id')
     @Roles('admin')
     @ApiOperation({ summary: 'Update a user by ID' })
-    @ApiParam({ name: 'id', description: 'User ID', type: Number })
+    @ApiParam({ name: 'id', description: 'User ID', type: String })
     @ApiResponse({ status: 200, description: 'User updated successfully', type: User })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
     @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
     @ApiResponse({ status: 404, description: 'User not found' })
-    update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
+    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
         return this.userService.update(id, updateUserDto);
     }
 
     @Delete(':id')
     @Roles('admin')
     @ApiOperation({ summary: 'Delete a user by ID' })
-    @ApiParam({ name: 'id', description: 'User ID', type: Number })
+    @ApiParam({ name: 'id', description: 'User ID', type: String })
     @ApiResponse({ status: 200, description: 'User deleted successfully' })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
     @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
     @ApiResponse({ status: 404, description: 'User not found' })
-    remove(@Param('id', ParseIntPipe) id: number) {
+    remove(@Param('id') id: string) {
         return this.userService.remove(id);
     }
 }

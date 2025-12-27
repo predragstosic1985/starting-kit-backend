@@ -4,8 +4,8 @@ import { ApiProperty } from '@nestjs/swagger';
 @Entity('users')
 export class User {
     @ApiProperty({ description: 'Unique identifier of the user' })
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @ApiProperty({ description: 'Name of the user', maxLength: 100 })
     @Column({ length: 100 })
