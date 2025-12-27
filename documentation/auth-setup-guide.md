@@ -1,201 +1,259 @@
 # 🔐 Keycloak Authentication Setup Guide
 
-**Context**: Authentication & authorization setup for NestJS backend and React frontend
-**Stack**: Keycloak, NestJS, React, PostgreSQL, Docker
-**Realm**: `starting-kit-realm`
+**Stack**: Keycloak, NestJS, React (Vite), PostgreSQL, Docker  
+**Realm**: `starting-kit-realm`  
+**Frontend**: http://localhost:5173  
+**Backend**: http://localhost:3000  
 
 ---
 
-## 1️⃣ Overview
-
-This guide provides a **clear, step-by-step** setup for Keycloak authentication using **OpenID Connect (OIDC)**.
-
-### Architecture
+## 1️⃣ Architecture Overview
 
 ```
-React Frontend ──► Keycloak ──► JWT
-│                          │
-└────────► NestJS Backend ◄┘
-```
 
-- Keycloak handles authentication and identity management
-- Backend validates JWT tokens and enforces authorization
-- Frontend uses OAuth2 Authorization Code Flow
+React (5173) ──► Keycloak ──► JWT
+│                         │
+└────────► NestJS (3000) ◄┘
+
+````
+
+- Keycloak → Authentication & Identity
+- NestJS → Token validation & authorization
+- React → Login & token usage
 
 ---
 
 ## 2️⃣ Prerequisites
 
-- Docker & Docker Compose installed
-- Infrastructure running:
+- Docker & Docker Compose
+- Running services:
   ```bash
   docker compose up
-  ```
-- NestJS backend available
-- React frontend available
-- Basic understanding of OAuth2 / OpenID Connect
+````
+
+* Keycloak Admin Console available
+* NestJS backend running
+* React (Vite) frontend running
 
 ---
 
-## 3️⃣ Keycloak Server Setup
+## 3️⃣ Keycloak Initial Setup
 
 ### 3.1 Access Admin Console
 
-- **URL**: `http://localhost:8081`
-- **Credentials**:
-  - Username: `admin`
-  - Password: `admin`
+* URL: [http://localhost:8081](http://localhost:8081)
+* Login:
 
-### 3.2 Create Realm
-
-1. Open realm dropdown → Create realm
-2. Set:
-   - Realm name: `starting-kit-realm`
-   - Enabled: `ON`
-3. Click **Create**
-
-✔️ This realm is shared by backend and frontend.
-
-### 3.3 Realm Login Settings (Development)
-
-1. Navigate to **Realm settings → Login**
-2. Configure:
-   - User registration: `optional`
-   - Login with email: `ON`
-   - Verify email: `OFF` (development only)
-   - Reset password: `ON`
+  * **admin / admin**
 
 ---
 
-## 4️⃣ Backend Client Configuration
+### 3.2 Create Realm
 
-### 4.1 Create Backend Client
+1. Realm dropdown → **Create realm**
+2. Settings:
 
-1. Navigate to **Clients → Create client**
-2. **Basic settings**:
-   - Client ID: `starting-kit-backend`
-   - Client type: `OpenID Connect`
-   - Client authentication: `ON`
-3. **Capability config**:
-   - Standard flow: `ON`
-   - Direct access grants: `OFF`
-4. **Login settings**:
-   - Valid redirect URIs: (leave empty)
-   - Web origins: (leave empty)
+   * Realm name: `starting-kit-realm`
+   * Enabled: ON
+3. Create
 
-✔️ Backend is a confidential client.
+---
 
-### 4.2 Client Secret
+## 4️⃣ Realm Roles (IMPORTANT)
 
-1. Open client → **Credentials**
-2. Copy the **Client Secret**
+### 4.1 Create Realm Roles
 
-### 4.3 Backend Environment Variables
+Go to **Realm Roles → Create role**
+
+Create:
+
+* `user`
+* `admin`
+
+✔️ Realm roles are used for **authorization inside JWT**
+
+---
+
+## 5️⃣ Backend Client (Confidential)
+
+### 5.1 Create Backend Client
+
+**Clients → Create client**
+
+**Basic settings**
+
+* Client ID: `starting-kit-backend`
+* Client type: OpenID Connect
+* Client authentication: **ON**
+
+**Capability config**
+
+* Standard flow: OFF
+* Direct access grants: OFF
+* Service accounts roles: **ON**
+
+✔️ Backend acts as a **resource server**
+
+---
+
+### 5.2 Assign Realm Roles to Backend Client
+
+1. Open `starting-kit-backend`
+2. Go to **Service account roles**
+3. Select **Realm roles**
+4. Assign:
+
+   * `user`
+   * `admin`
+
+✔️ This allows backend to validate and understand roles
+
+---
+
+### 5.3 Client Secret
+
+* Open **Credentials**
+* Copy **Client Secret**
+
+---
+
+### 5.4 Backend `.env`
 
 ```env
 KEYCLOAK_URL=http://localhost:8081
 KEYCLOAK_REALM=starting-kit-realm
 KEYCLOAK_CLIENT_ID=starting-kit-backend
-KEYCLOAK_CLIENT_SECRET=your-client-secret
+KEYCLOAK_CLIENT_SECRET=your-secret
 ```
 
 ---
 
-## 5️⃣ Frontend Client Configuration
+## 6️⃣ Frontend Client (Public – Vite)
 
-### 5.1 Create Frontend Client
+### 6.1 Create Frontend Client
 
-1. Navigate to **Clients → Create client**
-2. **Basic settings**:
-   - Client ID: `starting-kit-frontend`
-   - Client authentication: `OFF`
-   - Client type: `OpenID Connect`
-3. **Capability config**:
-   - Standard flow: `ON`
-   - Implicit flow: `OFF`
-   - Direct access grants: `OFF`
-4. **Login settings**:
-   - Valid redirect URIs:
-     ```
-     http://localhost:3001/*
-     ```
-   - Web origins:
-     ```
-     http://localhost:3001
-     ```
+**Clients → Create client**
 
-✔️ Frontend is a public client.
+**Basic settings**
 
----
+* Client ID: `starting-kit-frontend`
+* Client authentication: OFF
 
-## 6️⃣ Roles & Users
+**Capability config**
 
-### 6.1 Create Realm Roles
+* Standard flow: ON
+* Implicit flow: ❌ OFF
+* Direct access grants: ❌ OFF
 
-- `user`
-- `admin`
+**Login settings**
 
-### 6.2 Create Test User
+* Valid redirect URIs:
 
-1. Navigate to **Users → Create user**
-2. Set:
-   - Username: `testuser`
-   - Email verified: `ON`
-3. **Credentials**:
-   - Set password
-   - Temporary: `OFF`
-4. **Role mapping**:
-   - Assign `user` role
+  ```
+  http://localhost:5173/*
+  ```
+* Web origins:
+
+  ```
+  http://localhost:5173
+  ```
 
 ---
 
-## 7️⃣ Token Configuration
+## 7️⃣ Users & Role Mapping
 
-1. Navigate to **Realm settings → Tokens**
-2. Recommended for development:
-   - Access token lifespan: `5 minutes`
-   - Refresh token lifespan: `30 minutes`
+### 7.1 Create User
+
+**Users → Create user**
+
+* Username: `testuser`
+* Email verified: ON
+
+**Credentials**
+
+* Set password
+* Temporary: OFF
 
 ---
 
-## 8️⃣ NestJS Backend Integration
+### 7.2 Assign Roles to User
 
-### 8.1 JWT Validation Strategy
+1. Open user
+2. Go to **Role mapping**
+3. Assign realm roles:
 
-```typescript
-validate(payload: any) {
-  return {
-    id: payload.sub,
-    username: payload.preferred_username,
-    email: payload.email,
-    roles: payload.realm_access?.roles ?? [],
-  };
-}
+   * `user`
+   * `admin` (optional)
+
+✔️ Roles will appear in JWT token
+
+---
+
+## 8️⃣ Token Configuration
+
+**Realm settings → Tokens**
+
+Recommended:
+
+* Access token lifespan: **5 min**
+* Refresh token lifespan: **30 min**
+
+---
+
+## 9️⃣ Get Token via Postman (VERY IMPORTANT)
+
+### 9.1 Password Grant (Dev Only)
+
+**POST**
+
+```
+http://localhost:8081/realms/starting-kit-realm/protocol/openid-connect/token
 ```
 
-### 8.2 Guards
+**Headers**
 
-```typescript
-@Injectable()
-export class JwtAuthGuard extends AuthGuard('keycloak') {}
+```
+Content-Type: application/x-www-form-urlencoded
 ```
 
-```typescript
-@Injectable()
-export class RolesGuard implements CanActivate {
-  canActivate(ctx: ExecutionContext): boolean {
-    const roles = this.reflector.get<string[]>('roles', ctx.getHandler());
-    if (!roles) return true;
+**Body (x-www-form-urlencoded)**
 
-    const user = ctx.switchToHttp().getRequest().user;
-    return roles.some(r => user.roles?.includes(r));
-  }
-}
+```
+grant_type=password
+client_id=starting-kit-frontend
+username=testuser
+password=yourpassword
 ```
 
-### 8.3 Protect Routes
+✅ Response contains:
 
-```typescript
+* `access_token`
+* `refresh_token`
+
+---
+
+### 9.2 Test Backend API
+
+**GET**
+
+```
+http://localhost:3000/users/profile
+```
+
+**Headers**
+
+```
+Authorization: Bearer <ACCESS_TOKEN>
+```
+
+✔️ If valid → 200 OK
+❌ If missing/invalid → 401 Unauthorized
+
+---
+
+## 10️⃣ NestJS Authorization Example
+
+```ts
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles('user')
 @Get('profile')
@@ -206,17 +264,19 @@ getProfile(@User() user) {
 
 ---
 
-## 9️⃣ React Frontend Integration
+## 11️⃣ React (Vite) Integration
 
-### 9.1 Install Dependencies
+### 11.1 Install
 
 ```bash
 npm install keycloak-js @react-keycloak/web axios
 ```
 
-### 9.2 Keycloak Configuration
+---
 
-```typescript
+### 11.2 Keycloak Config
+
+```ts
 const keycloak = new Keycloak({
   url: 'http://localhost:8081',
   realm: 'starting-kit-realm',
@@ -224,7 +284,9 @@ const keycloak = new Keycloak({
 });
 ```
 
-### 9.3 Provider Setup
+---
+
+### 11.3 Provider
 
 ```tsx
 <ReactKeycloakProvider authClient={keycloak}>
@@ -232,10 +294,12 @@ const keycloak = new Keycloak({
 </ReactKeycloakProvider>
 ```
 
-### 9.4 API Client
+---
 
-```typescript
-client.interceptors.request.use(config => {
+### 11.4 Axios Token Injection
+
+```ts
+axios.interceptors.request.use(config => {
   if (keycloak.token) {
     config.headers.Authorization = `Bearer ${keycloak.token}`;
   }
@@ -245,41 +309,43 @@ client.interceptors.request.use(config => {
 
 ---
 
-## 🔒 Security Best Practices
+## 🔒 Security Rules Applied
 
-- Authorization Code Flow only
-- No implicit flow
-- No direct access grants
-- Backend uses confidential client
-- Roles validated on backend
+✅ Authorization Code Flow
+✅ Realm roles enforced server-side
+✅ No implicit flow
+✅ No direct access grants in production
+✅ Backend validates every request
 
 ---
 
-## 🧪 Testing Checklist
+## 🧪 Final Verification Checklist
 
-- Login via frontend
-- JWT present in API requests
-- Backend blocks unauthenticated access
-- Role-based access works correctly
+* [ ] Login via frontend works
+* [ ] Token contains `realm_access.roles`
+* [ ] Backend rejects unauthenticated calls
+* [ ] Role-based endpoints enforced
+* [ ] Postman test passes
 
 ---
 
 ## 🚀 Next Steps
 
-- Enable HTTPS
-- Implement token refresh handling
-- Environment-based configuration
-- Deploy Keycloak with persistent storage
+* HTTPS everywhere
+* Refresh token rotation
+* Azure Keycloak deployment
+* Environment-based realms
 
 ---
 
-## ✅ Final Notes
+## ✅ Summary
 
 This setup is:
 
-- Production-aligned
-- Secure by default
-- Suitable for local and cloud deployments
-- Easy to maintain and extend
+* production-ready
+* secure by default
+* suitable for local & cloud
+* aligned with Keycloak best practices
 
----
+```
+
